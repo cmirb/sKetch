@@ -45,27 +45,25 @@ document.addEventListener("DOMContentLoaded", function() {
       cell.addEventListener("mouseenter", changeColor);
   
       // Event listeners for touch events on mobile
-      let isTouching = false;
       cell.addEventListener("touchstart", function(event) {
         event.preventDefault();
-        isTouching = true;
         changeColor();
       });
+  
       cell.addEventListener("touchmove", function(event) {
         event.preventDefault();
-        if (isTouching) {
-          changeColor();
+        const touches = event.changedTouches;
+        for (let i = 0; i < touches.length; i++) {
+          const touch = touches[i];
+          const target = document.elementFromPoint(touch.clientX, touch.clientY);
+          if (target === cell) {
+            changeColor();
+          }
         }
       });
-      cell.addEventListener("touchend", function() {
-        isTouching = false;
-      });
   
-      return cell;
+      return cell; 
     }
-  
-  
-  
   
     function createGrid(size) {
       container.innerHTML = "";
