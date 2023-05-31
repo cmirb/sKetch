@@ -47,14 +47,24 @@ document.addEventListener("DOMContentLoaded", function() {
     cell.addEventListener("touchstart", function(event) {
         event.preventDefault();
         changeColor();
+        cell.addEventListener("touchmove", touchMoveHandler);
       });
-      cell.addEventListener("touchmove", function(event) {
+  
+      function touchMoveHandler(event) {
         event.preventDefault();
-        const touch = event.touches[0];
-        const target = document.elementFromPoint(touch.clientX, touch.clientY);
-        if (target === cell) {
-          changeColor();
+        const touches = event.touches;
+        for (let i = 0; i < touches.length; i++) {
+          const touch = touches[i];
+          const target = document.elementFromPoint(touch.clientX, touch.clientY);
+          if (target === cell) {
+            changeColor();
+          }
         }
+      }
+  
+      cell.addEventListener("touchend", function(event) {
+        event.preventDefault();
+        cell.removeEventListener("touchmove", touchMoveHandler);
       });
   
       return cell;
