@@ -36,13 +36,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function createGrid(size) {
         container.innerHTML = "";
-        const cellSize = Math.floor(960 / size);
-        container.style.height = `${cellSize * size}px`;
+        const cellSize = (960 - 2 * 5) / size; // subtracting the border size
+        container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+        container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
         for(let i = 0; i < size * size; i++) {
             const cell = createCell(cellSize);
             container.appendChild(cell);
         }
     }
+    
+    
 
     function rescaleGrid() {
         let newSize = prompt("Enter new size");
