@@ -51,7 +51,7 @@ body {
       width: 600px;
       height: 600px;
     }
-    
+
     .burger {
         display: none;
     }
@@ -117,41 +117,64 @@ body {
   }
   
   @media screen and (max-width: 600px) {
-    .buttons {
-      position: absolute;
-      right: -100%;
-      height: 100vh;
-      width: 200px;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: transform 0.3s ease-in-out;
-    }
-  
-    .burger {
-      display: block;
-      cursor: pointer;
-      height: 25px;
-      width: 25px;
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      padding: 10px; 
-      margin: 10px;
-    }
-  
-    .burger div {
-      width: 330px;
-      height: 30px;
-      background-color: #333;
-      margin: 5px;
-      transition: all 0.3s ease;
-    }
-  
-    .burger div img {
-      width: 30px;  
-      height: 30px; 
-      object-fit: contain; 
-    }
+  body {
+    align-items: flex-start; /* Adjust alignment */
   }
+
+  .container {
+    width: 100%; /* Take full width of the viewport */
+    max-height: calc(100vh - 50px); /* Adjust max-height to accommodate the burger menu */
+    flex-direction: column-reverse; /* Reverse the order for proper layout */
+  }
+
+  .buttons {
+    position: absolute;
+    right: -200px; /* Adjust position */
+    top: 0; /* Adjust position */
+    height: 100vh;
+    width: 200px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: right 0.3s ease-in-out; /* Adjust transition property */
+    background-color: white; /* Add background color */
+  }
+
+  .burger {
+    display: block;
+    cursor: pointer;
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    padding: 10px;
+    margin: 10px;
+    z-index: 1; /* Set z-index to ensure the burger icon appears above the grid */
+  }
+
+  .burger div {
+    width: 30px;
+    height: 4px; /* Adjust height */
+    background-color: #333;
+    margin: 5px;
+    transition: all 0.3s ease;
+  }
+
+  .burger div:last-child {
+    margin-bottom: 0; /* Remove margin-bottom */
+  }
+
+  .burger.active div {
+    transform: rotate(45deg); /* Adjust rotation */
+  }
+
+  .burger.active div:nth-child(2) {
+    opacity: 0; /* Hide middle line */
+  }
+
+  .burger.active div:last-child {
+    transform: rotate(-45deg); /* Adjust rotation */
+  }
+}
   
