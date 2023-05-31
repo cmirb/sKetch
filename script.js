@@ -45,27 +45,24 @@ document.addEventListener("DOMContentLoaded", function() {
       cell.addEventListener("mouseenter", changeColor);
   
       // Event listeners for touch events on mobile
+
       cell.addEventListener("touchstart", function(event) {
         event.preventDefault();
         changeColor();
-        isDrawing = true;
       });
-      cell.addEventListener("touchend", function(event) {
-        if (isDrawing) {
-          isDrawing = false;
-        }
-      });
+  
       cell.addEventListener("touchmove", function(event) {
         event.preventDefault();
         const touch = event.touches[0];
         const target = document.elementFromPoint(touch.clientX, touch.clientY);
-        if (target === cell && isDrawing) {
+        if (target === cell) {
           changeColor();
         }
       });
   
       return cell;
     }
+  
   
   
     function createGrid(size) {
