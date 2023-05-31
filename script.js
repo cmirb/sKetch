@@ -43,15 +43,19 @@ document.addEventListener("DOMContentLoaded", function() {
       }
   
       cell.addEventListener("mouseenter", changeColor);
-      cell.addEventListener("touchstart", function(event) {
+    // Event listeners for touch events on mobile
+    cell.addEventListener("touchstart", function(event) {
         event.preventDefault();
         changeColor();
       });
       cell.addEventListener("touchmove", function(event) {
         event.preventDefault();
-        changeColor();
+        const touch = event.touches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (target === cell) {
+          changeColor();
+        }
       });
-  
   
       return cell;
     }
