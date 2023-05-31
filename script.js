@@ -66,15 +66,20 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   
     function createGrid(size) {
-      container.innerHTML = "";
-      const cellSize = (960 - 2 * 5) / size; // subtracting the border size
-      container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
-      container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
-      for (let i = 0; i < size * size; i++) {
-        const cell = createCell(cellSize);
-        container.appendChild(cell);
+        container.innerHTML = "";
+        const containerStyle = getComputedStyle(container);
+        const containerWidth = parseInt(containerStyle.getPropertyValue('width'), 10);
+        const containerHeight = parseInt(containerStyle.getPropertyValue('height'), 10);
+        const containerSize = Math.min(containerWidth, containerHeight);
+        const cellSize = (containerSize - 2 * 5) / size; // subtracting the border size
+        container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+        container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+        for (let i = 0; i < size * size; i++) {
+          const cell = createCell(cellSize);
+          container.appendChild(cell);
+        }
       }
-    }
+      
   
     function rescaleGrid() {
       let newSize = prompt("Enter new size (1-100)");

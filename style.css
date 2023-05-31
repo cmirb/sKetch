@@ -4,7 +4,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     height: auto;
     min-height: 100vh;
     margin: 0;
@@ -28,6 +28,25 @@ body {
   .container {
     display: flex;
     flex-direction: row;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: max-content;
+    height: max-content;
+    margin: auto;
+  }
+
+  @media screen and (min-width: 600px) {
+    #container {
+      width: 600px;
+      height: 600px;
+    }
+  }
+  
+  @media screen and (min-width: 960px) {
+    #container {
+      width: 960px;
+      height: 960px;
+    }
   }
   
   .buttons {
