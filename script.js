@@ -43,7 +43,10 @@ document.addEventListener("DOMContentLoaded", function() {
       }
   
       cell.addEventListener("mouseenter", changeColor);
-      cell.addEventListener("touchstart", changeColor);
+      cell.addEventListener("touchmove", function(event) {
+        event.preventDefault();
+        changeColor();
+      });
   
       return cell;
     }
@@ -60,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   
     function rescaleGrid() {
-      let newSize = prompt("Enter new size");
+      let newSize = prompt("Enter new size (1-100)");
       if (newSize && !isNaN(newSize) && newSize <= 100) {
         createGrid(newSize);
       } else {
