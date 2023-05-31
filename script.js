@@ -23,24 +23,27 @@ document.addEventListener("DOMContentLoaded", function() {
       cell.style.width = `${size}px`;
       cell.style.height = `${size}px`;
   
-      cell.addEventListener("mouseenter", function() {
+      function changeColor() {
         if (rainbowMode) {
-            this.style.transition = 'background-color 0.4s ease'
-          this.style.backgroundColor = getRandomColor();
+          cell.style.transition = "background-color 0.3s ease";
+          cell.style.backgroundColor = getRandomColor();
         } else {
-          const currentColor = getComputedStyle(this).backgroundColor;
-          const targetColor = darkenColor(this);
-          this.style.transition = "background-color 0.3s ease";
-          this.style.backgroundColor = targetColor;
+          const currentColor = getComputedStyle(cell).backgroundColor;
+          const targetColor = darkenColor(cell);
+          cell.style.transition = "background-color 0.3s ease";
+          cell.style.backgroundColor = targetColor;
         }
   
         if (temporaryMode) {
           setTimeout(() => {
-            this.style.transition = "background-color 0.7s ease";
-            this.style.backgroundColor = "";
+            cell.style.transition = "background-color 0.3s ease";
+            cell.style.backgroundColor = "";
           }, 1000);
         }
-      });
+      }
+  
+      cell.addEventListener("mouseenter", changeColor);
+      cell.addEventListener("touchstart", changeColor);
   
       return cell;
     }
