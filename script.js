@@ -54,7 +54,15 @@ document.addEventListener("DOMContentLoaded", function() {
       cell.addEventListener("touchmove", function(event) {
         event.preventDefault();
         if (isTouching) {
-          changeColor();
+          const touches = event.touches;
+          for (let i = 0; i < touches.length; i++) {
+            const touch = touches[i];
+            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (target === cell) {
+              changeColor();
+              break;
+            }
+          }
         }
       });
       cell.addEventListener("touchend", function() {
