@@ -43,10 +43,15 @@ document.addEventListener("DOMContentLoaded", function() {
       }
   
       cell.addEventListener("mouseenter", changeColor);
+      cell.addEventListener("touchstart", function(event) {
+        event.preventDefault();
+        changeColor();
+      });
       cell.addEventListener("touchmove", function(event) {
         event.preventDefault();
         changeColor();
       });
+  
   
       return cell;
     }
