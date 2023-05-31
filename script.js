@@ -43,8 +43,9 @@ document.addEventListener("DOMContentLoaded", function() {
       }
   
       cell.addEventListener("mouseenter", changeColor);
-    // Event listeners for touch events on mobile
-    cell.addEventListener("touchstart", function(event) {
+  
+      // Event listeners for touch events on mobile
+      cell.addEventListener("touchstart", function(event) {
         event.preventDefault();
         changeColor();
         cell.addEventListener("touchmove", touchMoveHandler);
@@ -95,14 +96,14 @@ document.addEventListener("DOMContentLoaded", function() {
       const button = document.getElementById("temporary-mode");
       button.textContent = temporaryMode ? "Permanent Mode" : "Temporary Mode";
     }
-
+  
     function eraseAllCells() {
-        const cells = container.querySelectorAll(".cell");
-        cells.forEach(cell => {
-          cell.style.transition = "background-color 0.3s ease";
-          cell.style.backgroundColor = "";
-        });
-      }
+      const cells = container.querySelectorAll(".cell");
+      cells.forEach(cell => {
+        cell.style.transition = "background-color 0.3s ease";
+        cell.style.backgroundColor = "";
+      });
+    }
   
     document.getElementById("rescale").addEventListener("click", rescaleGrid);
     document.getElementById("rainbow").addEventListener("click", function() {
