@@ -51,12 +51,20 @@ body {
       width: 600px;
       height: 600px;
     }
+    
+    .burger {
+        display: none;
+    }
   }
   
   @media screen and (min-width: 960px) {
     .container {
       width: 960px;
       height: 960px;
+    }
+
+    .burger {
+        display: none;
     }
   }
   
@@ -143,7 +151,7 @@ body {
     .burger div img {
       width: 30px;  
       height: 30px; 
-      object-fit: contain; //this will ensure that the aspect ratio of the image is maintained while resizing.
+      object-fit: contain; 
     }
   }
   
