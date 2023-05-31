@@ -21,21 +21,23 @@ document.addEventListener("DOMContentLoaded", function() {
         cell.classList.add("cell");
         cell.style.width = `${size}px`;
         cell.style.height = `${size}px`;
-
-        cell.addEventListener("mouseover", function() {
+    
+        cell.addEventListener("mouseenter", function() {
             if (rainbowMode) {
                 this.style.backgroundColor = getRandomColor();
             } else {
                 this.style.backgroundColor = darkenColor(this);
             }
         });
-
+    
         return cell;
     }
+    
 
     function createGrid(size) {
         container.innerHTML = "";
-        const cellSize = 960 / size;
+        const cellSize = Math.floor(960 / size);
+        container.style.height = `${cellSize * size}px`;
         for(let i = 0; i < size * size; i++) {
             const cell = createCell(cellSize);
             container.appendChild(cell);
