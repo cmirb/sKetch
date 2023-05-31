@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
         event.preventDefault();
         changeColor();
       });
-      cell.addEventListener("touchmove", function(event) {
+      cell.addEventListener("touchenter", function(event) {
         event.preventDefault();
         const touch = event.touches[0];
         const target = document.elementFromPoint(touch.clientX, touch.clientY);
