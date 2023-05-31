@@ -33,6 +33,7 @@ body {
     width: max-content;
     height: max-content;
     margin: auto;
+    overflow: hidden;
   }
   .burger {
     display: none;
@@ -114,6 +115,9 @@ body {
     height: 100%;
     padding: 0;
     border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   @media screen and (max-width: 600px) {
