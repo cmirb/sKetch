@@ -1,134 +1,170 @@
 document.addEventListener("DOMContentLoaded", function() {
-    let rainbowMode = false;
-    let temporaryMode = false;
-    const container = document.getElementById("container");
-    let gridSize = 16; // Initial grid size
-  
-    function getRandomColor() {
-      const r = Math.floor(Math.random() * 256);
-      const g = Math.floor(Math.random() * 256);
-      const b = Math.floor(Math.random() * 256);
-      return `rgb(${r}, ${g}, ${b})`;
-    }
-  
-    function darkenColor(element) {
-      const currentColor = getComputedStyle(element).backgroundColor;
-      const match = /rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*(\d+(?:\.\d+)?))?\)/.exec(currentColor);
-      const darkerColor = `rgb(${match[1] * 0.9}, ${match[2] * 0.9}, ${match[3] * 0.9})`;
-      return darkerColor;
-    }
-  
-    function createCell() {
-        const cell = document.createElement("div");
-        cell.classList.add("cell");
-      
-        function changeColor() {
-          if (rainbowMode) {
-            cell.style.transition = "background-color 0.3s ease";
-            cell.style.backgroundColor = getRandomColor();
-          } else {
-            const currentColor = getComputedStyle(cell).backgroundColor;
-            const targetColor = darkenColor(cell);
-            cell.style.transition = "background-color 0.3s ease";
-            cell.style.backgroundColor = targetColor;
-          }
-      
-          if (temporaryMode) {
-            setTimeout(() => {
-              cell.style.transition = "background-color 0.3s ease";
-              cell.style.backgroundColor = "";
-            }, 1000);
-          }
-        }
-      
-        cell.addEventListener("mouseenter", changeColor);
-      
-        // Event listeners for touch events on mobile
-        cell.addEventListener("touchstart", function (event) {
-          event.preventDefault();
-          changeColor();
-        });
-      
-        cell.addEventListener("touchmove", function (event) {
-          event.preventDefault();
-          const touches = event.changedTouches;
-          for (let i = 0; i < touches.length; i++) {
-            const touch = touches[i];
-            const target = document.elementFromPoint(touch.clientX, touch.clientY);
-            if (target === cell) {
-              changeColor();
-            }
-          }
-        });
-      
-        return cell;
-      }
-      
-      function createGrid(size) {
-        container.innerHTML = "";
-        const containerStyle = getComputedStyle(container);
-        const containerWidth = parseInt(containerStyle.getPropertyValue("width"), 10);
-        const containerHeight = parseInt(containerStyle.getPropertyValue("height"), 10);
-        const containerPadding = 20; // Total padding size (10px on each side)
-        const containerBorder = 10; // Total border size (5px on each side)
-        const minContainerSize = Math.min(containerWidth, containerHeight) - (containerPadding + containerBorder);
-        const cellSize = Math.floor(minContainerSize / size);
-        const gridWidth = cellSize * size;
-        container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
-        container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
-        container.style.width = `${gridWidth + containerPadding + containerBorder}px`;
-        container.style.height = `${gridWidth + containerPadding + containerBorder}px`;
-        for (let i = 0; i < size * size; i++) {
-          const cell = createCell();
-          cell.style.width = `${cellSize}px`;
-          cell.style.height = `${cellSize}px`;
-          container.appendChild(cell);
-        }
-        gridSize = size; // Update grid size
-      }
-      
-    function rescaleGrid() {
-      let newSize = prompt("Enter new size (1-100)");
-      if (newSize && !isNaN(newSize) && newSize >= 1 && newSize <= 100) {
-        createGrid(newSize);
-      } else {
-        alert("Please enter a valid number (1-100)");
-      }
-    }
-  
-    function toggleTemporaryMode() {
-      temporaryMode = !temporaryMode;
-      const button = document.getElementById("temporary-mode");
-      button.textContent = temporaryMode ? "Permanent Mode" : "Temporary Mode";
-    }
-  
-    function eraseAllCells() {
-      const cells = container.querySelectorAll(".cell");
-      cells.forEach(cell => {
+  let rainbowMode = false;
+  let temporaryMode = false;
+  const container = document.getElementById("container");
+  let gridSize = 16; // Initial grid size
+  let cellColors = {}; // Store cell colors
+
+  function getRandomColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  function darkenColor(element) {
+    const currentColor = getComputedStyle(element).backgroundColor;
+    const match = /rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*(\d+(?:\.\d+)?))?\)/.exec(currentColor);
+    const darkerColor = `rgb(${match[1] * 0.9}, ${match[2] * 0.9}, ${match[3] * 0.9})`;
+    return darkerColor;
+  }
+
+  function createCell() {
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+
+    function changeColor() {
+      if (rainbowMode) {
         cell.style.transition = "background-color 0.3s ease";
-        cell.style.backgroundColor = "";
-      });
+        cell.style.backgroundColor = getRandomColor();
+      } else {
+        const currentColor = getComputedStyle(cell).backgroundColor;
+        const targetColor = darkenColor(cell);
+        cell.style.transition = "background-color 0.3s ease";
+        cell.style.backgroundColor = targetColor;
+      }
+
+      if (temporaryMode) {
+        setTimeout(() => {
+          cell.style.transition = "background-color 0.3s ease";
+          cell.style.backgroundColor = "";
+        }, 1000);
+      }
     }
-  
-    document.getElementById("rescale").addEventListener("click", rescaleGrid);
-    document.getElementById("rainbow").addEventListener("click", function() {
-      rainbowMode = !rainbowMode;
-      this.textContent = rainbowMode ? "B&W Mode" : "Rainbow Mode";
+
+    cell.addEventListener("mouseenter", changeColor);
+
+    // Event listeners for touch events on mobile
+    cell.addEventListener("touchstart", function (event) {
+      event.preventDefault();
+      changeColor();
     });
-    document.getElementById("temporary-mode").addEventListener("click", toggleTemporaryMode);
-    document.getElementById("erase-all").addEventListener("click", eraseAllCells);
-  
-    createGrid(gridSize); // Initial grid creation
-  
-    window.addEventListener("resize", function() {
-      createGrid(gridSize); // Re-create grid on window resize
+
+    cell.addEventListener("touchmove", function (event) {
+      event.preventDefault();
+      const touches = event.changedTouches;
+      for (let i = 0; i < touches.length; i++) {
+        const touch = touches[i];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (target === cell) {
+          changeColor();
+        }
+      }
     });
-  
-    const burger = document.querySelector('.burger');
-    const nav = document.querySelector('.buttons');
-  
-    burger.addEventListener('click', () => {
-      nav.classList.toggle('active');
+
+    return cell;
+  }
+
+  function createGrid(size) {
+    container.innerHTML = "";
+    const containerStyle = getComputedStyle(container);
+    const containerWidth = parseInt(containerStyle.getPropertyValue("width"), 10);
+    const containerHeight = parseInt(containerStyle.getPropertyValue("height"), 10);
+    const containerPadding = 20; // Total padding size (10px on each side)
+    const containerBorder = 10; // Total border size (5px on each side)
+    const minContainerSize = Math.min(containerWidth, containerHeight) - (containerPadding + containerBorder);
+    const cellSize = Math.floor(minContainerSize / size);
+    const gridWidth = cellSize * size;
+    container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+    container.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+    container.style.width = `${gridWidth + containerPadding + containerBorder}px`;
+    container.style.height = `${gridWidth + containerPadding + containerBorder}px`;
+    for (let i = 0; i < size * size; i++) {
+      const cell = createCell();
+      cell.style.width = `${cellSize}px`;
+      cell.style.height = `${cellSize}px`;
+      const cellId = `cell-${i}`;
+      cell.id = cellId;
+
+      // Reapply the stored color if available
+      if (cellColors.hasOwnProperty(cellId)) {
+        cell.style.backgroundColor = cellColors[cellId];
+      }
+
+      container.appendChild(cell);
+    }
+
+    gridSize = size; // Update grid size
+  }
+
+  function rescaleGrid() {
+    let newSize = prompt("Enter new size (1-100)");
+    if (newSize && !isNaN(newSize) && newSize >= 1 && newSize <= 100) {
+      storeCellColors(); // Store the current cell colors before resizing
+      createGrid(newSize);
+      restoreCellColors(); // Reapply the stored cell colors after resizing
+    } else {
+      alert("Please enter a valid number (1-100)");
+    }
+  }
+
+  function toggleTemporaryMode() {
+    temporaryMode = !temporaryMode;
+    const button = document.getElementById("temporary-mode");
+    button.textContent = temporaryMode ? "Permanent Mode" : "Temporary Mode";
+  }
+
+  function eraseAllCells() {
+    const cells = container.querySelectorAll(".cell");
+    cells.forEach(cell => {
+      cell.style.transition = "background-color 0.3s ease";
+      cell.style.backgroundColor = "";
     });
+  }
+
+  function storeCellColors() {
+    const cells = container.querySelectorAll(".cell");
+    cellColors = {};
+    cells.forEach(cell => {
+      const cellId = cell.id;
+      const cellColor = getComputedStyle(cell).backgroundColor;
+      cellColors[cellId] = cellColor;
+    });
+  }
+
+  function restoreCellColors() {
+    const cells = container.querySelectorAll(".cell");
+    cells.forEach(cell => {
+      const cellId = cell.id;
+      if (cellColors.hasOwnProperty(cellId)) {
+        cell.style.backgroundColor = cellColors[cellId];
+      }
+    });
+  }
+
+  document.getElementById("rescale").addEventListener("click", rescaleGrid);
+  document.getElementById("rainbow").addEventListener("click", function() {
+    rainbowMode = !rainbowMode;
+    this.textContent = rainbowMode ? "B&W Mode" : "Rainbow Mode";
   });
-  
+  document.getElementById("temporary-mode").addEventListener("click", toggleTemporaryMode);
+  document.getElementById("erase-all").addEventListener("click", eraseAllCells);
+
+  createGrid(gridSize); // Initial grid creation
+
+  window.addEventListener("resize", function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      storeCellColors(); // Store the current cell colors before resizing
+      createGrid(gridSize); // Re-create grid on window resize
+      restoreCellColors(); // Reapply the stored cell colors after resizing
+    }, 200);
+  });
+
+  const burger = document.querySelector('.burger');
+  const nav = document.querySelector('.buttons');
+
+  burger.addEventListener('click', () => {
+    nav.classList.toggle('active');
+  });
+});
